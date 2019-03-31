@@ -10,7 +10,17 @@ app.use(cors());
 
 const posts = require("./routes/api/posts");
 
-app.use('/api/posts', posts);
+app.use("/api/posts", posts);
+
+// Handle prod
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(__dirname + "/public/"));
+}
+
+// Handle SPA
+app.get(/.*/, (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 const port = process.env.PORT || 5000;
 
